@@ -42,22 +42,55 @@ function validateButtonState() {
     submitButton.disabled = !bothInputsAreValid
 }
 
-async function validateSubmit(e: SubmitEvent) {
+async function askPrompt(e: SubmitEvent) {
     e.preventDefault()
 
     disableAllInputs()
     submitButton.innerText = "Fighting..."
+    answerContainer.innerText = ""
 
-    try {
-        postAnswer(firstInput.value + ", " + secondInput.value)
-        answerContainer.parentElement?.classList.remove('hidden')
-    } catch (e) {
-        submitButton.innerText = "Try again"
-        console.error(e)
-    } finally {
-        submitButton.innerText = "Ask ChatGPT"
-        enableAllInputs()
-    }
+    const fight = fightSelect.value.slice(0, fightSelect.value.length - 1)
+    const a = firstInput.value
+    const b = secondInput.value
+
+    const stream = new EventSource(`/api/ai?fight=${fight}&a=${a}&b=${b}`)
+
+    stream.addEventListener('message', function(e) {
+        if (e.data === '[DONE]') {
+            stream.close()
+
+            enableAllInputs()
+            submitButton.innerText = "Ask ChatGPT"
+
+            return
+        }
+
+        const message = JSON.parse(e.data)
+        const delta = message.choices[0].delta.content
+
+        if (delta) {
+            answerContainer.innerText += delta
+            answerContainer.parentElement?.classList.remove('hidden')
+        }
+    })
+
+    stream.addEventListener('error', function(e) {
+        function error() {
+            enableAllInputs()
+            submitButton.innerText = "Try again"
+        }
+
+        const event = e.target as EventSource
+        if (event.readyState === EventSource.CLOSED) {
+            console.log('EventSource connection closed')
+            error()
+        } else if (event.readyState === EventSource.CONNECTING) {
+            console.log('EventSource connection failed. Retrying...')
+        } else {
+            console.error('EventSource encountered an unknown error:', e)
+            error()
+        }
+    })
 }
 
 function getTextWidth(text: string, font: string, fontSize: number) {
@@ -97,10 +130,6 @@ function enableAllInputs() {
     submitButton.disabled = false
 }
 
-function postAnswer(answer: string) {
-    answerContainer.innerText = answer
-}
-
 function openHelpModal() { helpModal.showModal() }
 function closeHelpModal() { helpModal.close() }
 
@@ -116,4 +145,4 @@ secondInput.addEventListener('keypress', validateInput)
 firstInput.addEventListener('input', validateButtonState)
 secondInput.addEventListener('input', validateButtonState)
 
-form.addEventListener('submit', validateSubmit)
+form.addEventListener('submit', askPrompt)

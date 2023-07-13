@@ -45,6 +45,8 @@ dialog::backdrop {
 section {
     margin: 0 auto;
     max-width: 800px;
+    max-height: 480px;
+    overflow: scroll;
 }
 
 aside {
@@ -69,10 +71,6 @@ label {
     width: 100%;
     
     font-size: 1rem;
-    
-    @media only screen and (min-width: 768px) {
-        font-size: 2rem;
-    }
 }
 
 select {
@@ -83,14 +81,6 @@ select {
     min-width: 50px;
 
     font-size: 16px;
-    
-    @media only screen and (min-width: 768px) {
-        flex: unset;
-        font-size: 2rem;
-
-        margin-left: -1px;
-        margin-bottom: -3px;
-    }
 }
 
 .input-group {
@@ -101,19 +91,11 @@ select {
     gap: 0.25rem;
 
     width: 100%;
-
-    @media only screen and (min-width: 768px) {
-        flex-direction: row;
-    }
 }
 
 .input-group > input,
 .input-group > span {
     font-size: 1.5rem;
-
-    @media only screen and (min-width: 768px) {
-        font-size: 2rem;
-    }
 }
 
 input {
@@ -129,10 +111,6 @@ button {
     width: 100%;
 
     cursor: pointer;
-
-    @media only screen and (min-width: 768px) {
-        width: fit-content;
-    }
 }
 
 button:disabled {
@@ -163,11 +141,26 @@ section:nth-of-type(2) {
     font-size: 1.5rem;
 }
 
-#version {
-    position: fixed;
-    bottom: 0;
-    right: 8px;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+@media (min-width: 768px) {
+    label,
+    select,
+    .input-group > input,
+    .input-group > span {
+        font-size: 2rem;
+    }
+
+    select {
+        flex: unset;
+
+        margin-left: -1px;
+        margin-bottom: -3px;
+    }
+
+    button {
+        width: fit-content;
+    }
+
+    .input-group {
+        flex-direction: row;
+    }
 }
