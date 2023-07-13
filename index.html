@@ -14,29 +14,30 @@
     <header>
         <h1 class="hidden">Who would win?</h1>
     </header>
+    <button type="button" id="help-button" aria-label="Help">?</button>
     <dialog id="modal" aria-labelledby="modal-title" aria-describedby="modal-description">
         <h2 id="modal-title" style="margin-top: 0;">What is this?</h2>
         <p>Have you ever wondered who would win a fight between a bear and a gorilla? Or between Batman and Superman? Dwayne "The Rock" Johnson and Vin Diesel? Maybe both of them at once versus 10,000 killer bees?</p>
         <p>Well, wonder no further.</p>
         <p id="modal-description">You can ask ChatGPT who would win a fight between any two things by choosing a competition, typing two names, and clicking "Ask ChatGPT".</p>
-        <button class="button" id="modal-button" aria-label="Exit help modal">Weird, but ok!</button>
+        <button class="button" aria-label="Exit help modal">Weird, but ok!</button>
     </dialog>
     <section>
         <aside alt="Website URL">whowouldwin.ai</aside>
         <form>
             <label>
                 <span>Who would win in a</span>
-                <select id="select-competition" name="select-competition">
-                    <option>Fight</option>
-                    <option>100-metre dash</option>
-                    <option>Rap battle</option>
-                    <option>Slam dunk contest</option>
+                <select name="select-competition">
+                    <option>Fight?</option>
+                    <option>100-metre dash?</option>
+                    <option>Rap battle?</option>
+                    <option>Slam dunk contest?</option>
                 </select>
             </label>
             <div class="input-group">
-                <input type="text" pattern="[a-zA-Z0-9-]+" minlength="1" maxlength="128" required placeholder="One horse-sized duck" />
+                <input name="first" type="text" minlength="1" maxlength="32" required placeholder="One horse-sized duck" />
                 <span>vs.</span>
-                <input type="text" pattern="[a-zA-Z0-9-]+" minlength="1" maxlength="128" required placeholder="100 duck-sized horses" />
+                <input name="second" type="text" minlength="1" maxlength="32" required placeholder="100 duck-sized horses" />
             </div>
             <button type="submit" disabled>Ask ChatGPT</button>
         </form>

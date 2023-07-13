@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
     width: 100%;
     height: 100%;
     margin: 0;
@@ -19,9 +20,9 @@ body {
     gap: 1rem;
 }
 
-section, dialog {
+section,
+dialog {
     width: 96%;
-    margin: auto;
 
     padding: 1rem 2rem;
     box-sizing: border-box;
@@ -33,21 +34,16 @@ section, dialog {
 }
 
 dialog {
+    margin: auto;
     max-width: 640px;
 }
 
 dialog::backdrop {
-    /* background: rgba(0, 0, 0, 0.3); */
-    background: repeating-linear-gradient(
-        45deg,
-        rgba(255, 0, 0, 0.2),
-        rgba(255, 0, 0, 0.2) 1px,
-        rgba(255, 0, 0, 0.3) 1px,
-        rgba(255, 0, 0, 0.3) 20px
-      );
+    background: rgba(0, 0, 0, 0.4);
 }
 
 section {
+    margin: 0 auto;
     max-width: 800px;
 }
 
@@ -68,7 +64,6 @@ form {
 
 label {
     display: flex;
-    align-items: center;
     justify-content: center;
     gap: 0.25rem;
     width: 100%;
@@ -76,20 +71,26 @@ label {
     font-size: 1rem;
     
     @media only screen and (min-width: 768px) {
-        font-size: 1.5rem;
+        font-size: 2rem;
     }
 }
 
-label > select {
+select {
+    border: transparent;
     flex: 1;
+    margin-left: -2px;
+    margin-bottom: -1px;
+    min-width: 50px;
 
+    font-size: 16px;
+    
     @media only screen and (min-width: 768px) {
         flex: unset;
-    }
-}
+        font-size: 2rem;
 
-label::after {
-    content: '?';
+        margin-left: -1px;
+        margin-bottom: -3px;
+    }
 }
 
 .input-group {
@@ -106,15 +107,18 @@ label::after {
     }
 }
 
-input {
+.input-group > input,
+.input-group > span {
     font-size: 1.5rem;
-    
-    width: 100%;
-    box-sizing: border-box;
 
     @media only screen and (min-width: 768px) {
         font-size: 2rem;
     }
+}
+
+input {
+    width: 100%;
+    box-sizing: border-box;
 }
 
 button {
@@ -124,9 +128,25 @@ button {
     padding: 0.5rem;
     width: 100%;
 
+    cursor: pointer;
+
     @media only screen and (min-width: 768px) {
         width: fit-content;
     }
+}
+
+button:disabled {
+    cursor: not-allowed;
+}
+
+body > button {
+    position: fixed;
+    top: 0;
+    right: 8px;
+    width: 3rem;
+    height: 3rem;
+
+    border-radius: 100%;
 }
 
 .hidden {
