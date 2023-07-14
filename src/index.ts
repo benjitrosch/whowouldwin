@@ -1,3 +1,7 @@
+const DEFAULT_SUBMIT_TEXT = "Ask ChatGPT"
+const LOADING_SUBMIT_TEXT = "Fighting..."
+const FAILURE_SUBMIT_TEXT = "Try again"
+
 function assert(condition: boolean, message: string) {
     if (!condition) throw new Error(message)
 }
@@ -46,7 +50,7 @@ async function askPrompt(e: SubmitEvent) {
     e.preventDefault()
 
     disableAllInputs()
-    submitButton.innerText = "Fighting..."
+    submitButton.innerText = LOADING_SUBMIT_TEXT
     answerContainer.innerText = ""
 
     const fight = fightSelect.value.slice(0, fightSelect.value.length - 1)
@@ -60,7 +64,7 @@ async function askPrompt(e: SubmitEvent) {
             stream.close()
 
             enableAllInputs()
-            submitButton.innerText = "Ask ChatGPT"
+            submitButton.innerText = DEFAULT_SUBMIT_TEXT
 
             return
         }
@@ -77,7 +81,7 @@ async function askPrompt(e: SubmitEvent) {
     stream.addEventListener('error', function(e) {
         function error() {
             enableAllInputs()
-            submitButton.innerText = "Try again"
+            submitButton.innerText = FAILURE_SUBMIT_TEXT
         }
 
         const event = e.target as EventSource

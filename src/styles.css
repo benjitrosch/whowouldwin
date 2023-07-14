@@ -24,7 +24,6 @@ section,
 dialog {
     width: 96%;
 
-    padding: 1rem 2rem;
     box-sizing: border-box;
 
     border: 1px solid black;
@@ -35,6 +34,7 @@ dialog {
 
 dialog {
     margin: auto;
+    padding: 1rem 2rem;
     max-width: 640px;
 }
 
@@ -44,9 +44,8 @@ dialog::backdrop {
 
 section {
     margin: 0 auto;
+    padding: 0.5rem;
     max-width: 800px;
-    max-height: 480px;
-    overflow: scroll;
 }
 
 aside {
@@ -117,7 +116,21 @@ button:disabled {
     cursor: not-allowed;
 }
 
-body > button {
+section > div {
+    font-size: 1rem;
+
+    max-height: 480px;
+    margin-top: 1rem;
+    padding: 0.5rem;
+    box-sizing: border-box;
+
+    border: 1px solid black;
+    border-radius: 0.5rem;
+
+    overflow: scroll;
+}
+
+#help-button {
     position: fixed;
     top: 0;
     right: 8px;
@@ -137,16 +150,22 @@ body > button {
     overflow: hidden;
 }
 
-section:nth-of-type(2) {
-    font-size: 1.5rem;
-}
-
 @media (min-width: 768px) {
     label,
     select,
     .input-group > input,
     .input-group > span {
         font-size: 2rem;
+    }
+
+    section {
+        padding: 1rem 2rem;
+    }
+
+    section > div {
+        font-size: 1.5rem;
+
+        padding: 1rem 2rem;
     }
 
     select {

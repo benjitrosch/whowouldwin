@@ -17,6 +17,7 @@ const systemMessages = [
     "Always justify your answers.",
     "Your justification does not need to be logical.",
     "Do not let your responses get too long.",
+    "Keep your answer within in a single paragraph.",
 ]
 
 const createPrompt = (fight, a, b) =>
