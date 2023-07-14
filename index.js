@@ -16,8 +16,7 @@ const systemMessages = [
     "Hold strong opinions — even nonsense ones.",
     "Always justify your answers.",
     "Your justification does not need to be logical.",
-    "Do not let your responses get too long.",
-    "Keep your answer within in a single paragraph.",
+    "Answer in 3 short sentences or less.",
 ]
 
 const createPrompt = (fight, a, b) =>

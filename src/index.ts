@@ -1,3 +1,5 @@
+import { init } from "./fire"
+
 const DEFAULT_SUBMIT_TEXT = "Ask ChatGPT"
 const LOADING_SUBMIT_TEXT = "Fighting..."
 const FAILURE_SUBMIT_TEXT = "Try again"
@@ -5,13 +7,12 @@ const FAILURE_SUBMIT_TEXT = "Try again"
 const LABEL_ARIA_TEXT = (fight: string) => `Who would win in a ${fight}?`
 
 const DEFAULT_PLACEHOLDERS: [string, string][] = [
-    ["One horse-sized duck", "100 duck-sized horses"],
     ["Goku", "Superman"],
     ["Bear", "Gorilla"],
     ["Ninjas", "Pirates"],
     ["Robocop", "Terminator"],
     ["Godzilla", "King Kong"],
-    ["Myself", "1,000 five year-olds"],
+    ["Myself", "100 five year-olds"],
     ["Mark Zuckerberg", "Elon Musk"],
 ]
 
@@ -123,14 +124,22 @@ function getTextWidth(text: string, font: string, fontSize: number) {
     return metrics.width
 }
 
+function debounce(func: () => void, wait: number): () => void {
+    let timeout: ReturnType<typeof setTimeout> | null
+    return function () {
+        if (timeout) clearTimeout(timeout)
+        timeout = setTimeout(func, wait)
+    }
+}
+
 function resizeSelect() {
     const text = selectFight.options[selectFight.selectedIndex].text
-    const style = window.getComputedStyle(document.body)
+    const style = window.getComputedStyle(selectFight)
     const font =  style.getPropertyValue('font-family')
-    const fontSize = 2 * parseInt(style.getPropertyValue('font-size'), 10)
+    const fontSize = parseInt(style.getPropertyValue('font-size'), 10)
     const textWidth = getTextWidth(text, font, fontSize)
 
-    selectFight.style.width = `${textWidth + 20}px`
+    selectFight.style.width = `${textWidth + 16}px`
 }
 
 function updateSelectAriaLabel() {
@@ -165,6 +174,7 @@ resizeSelect()
 updateSelectAriaLabel()
 
 selectFight.addEventListener('change', handleSelect)
+window.addEventListener('resize', debounce(resizeSelect, 100))
 
 inputA.addEventListener('keypress', validateInput)
 inputB.addEventListener('keypress', validateInput)
@@ -173,3 +183,5 @@ inputA.addEventListener('input', validateButtonState)
 inputB.addEventListener('input', validateButtonState)
 
 form.addEventListener('submit', askPrompt)
+
+init()

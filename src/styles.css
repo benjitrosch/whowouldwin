@@ -1,41 +1,55 @@
-html,
-body {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-}
-
-body {
+* {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 
+    color: white;
+    background: transparent;
+}
+
+html,
+body {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+
+    background: black;
+}
+
+body {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 1rem;
+
+    max-width: 768px;
+    min-height: 100vh;
+    margin: auto;
 }
 
 section {
-    width: 96%;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 1rem 2rem;
+    position: relative;
+    z-index: 1;
+
+    width: 100%;
+
+    padding: 2rem;
     box-sizing: border-box;
+}
 
-    border: 1px solid black;
-    border-radius: 0.5rem;
+section > div {
+    font-size: 1.5rem;
+    padding: 2rem;
 
-    box-shadow: 0 4px 6px rgba(0,0,0,.1);
+    background-color: black;
+    border: 1px solid white;
 }
 
 aside {
     text-align: right;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 form {
@@ -50,21 +64,22 @@ form {
 
 label {
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    gap: 0.25rem;
+    align-items: center;
+    gap: 0.5rem;
     width: 100%;
     
-    font-size: 1.5rem;
+    font-size: 2rem;
 }
 
 select {
     border: transparent;
-    flex: 1;
     margin-left: -2px;
-    margin-bottom: -3px;
+    margin-bottom: -1px;
     min-width: 50px;
 
-    font-size: 1.5rem;
+    font-size: 2rem;
 
     cursor: pointer;
 }
@@ -74,7 +89,7 @@ select {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.25rem;
+    gap: 0.5rem;
 
     width: 100%;
 }
@@ -86,6 +101,7 @@ select {
 
 input {
     width: 100%;
+    padding: 0.5rem;
     box-sizing: border-box;
 }
 
@@ -93,18 +109,49 @@ button {
     font-size: 1.5rem;
 
     margin-top: 2rem;
-    padding: 0.5rem;
+    padding: 1rem;
     width: 100%;
 
     cursor: pointer;
 }
 
 button:disabled {
+    color: #666666;
     cursor: not-allowed;
 }
 
-section > div {
-    font-size: 1.5rem;
+footer {
+    position: fixed;
+    z-index: 1;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 0.25rem 0.5rem;
+
+    border-top-left-radius: 0.5rem;
+    
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0,0,0,.5);
+}
+
+small, a {
+    font-size: 16px;
+    text-align: left;
+    color: black;
+}
+
+canvas {
+    position: fixed;
+    z-index: 0;
+    top: 0;
+    left: 50;
+
+    width: 100%;
+    height: 100%;
+    max-width: 960px;
 }
 
 .hidden {
@@ -118,17 +165,16 @@ section > div {
 }
 
 @media (min-width: 768px) {
-    label,
-    select,
     section > div {
         font-size: 2rem;
+    }
+
+    label {
+        flex-direction: row;
     }
     
     select {
         flex: unset;
-
-        margin-left: -1px;
-        margin-bottom: -3px;
     }
 
     button {
@@ -137,5 +183,6 @@ section > div {
 
     .input-group {
         flex-direction: row;
+        gap: 1rem;
     }
 }
