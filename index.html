@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WWWAI - Who Would Win?</title>
+    <title>Who would win in a fight (according to AI)?</title>
     <meta name="description" content="Ask AI who would in a fight, race, or any other competition.">
     <meta name="keywords" content="Who would win, wwwai, ai fights, ai competition, ai versus, gpt-3.5-turbo, gpt-4, AI">
     <meta name="author" content="Benji Trosch">
@@ -14,37 +14,30 @@
     <header>
         <h1 class="hidden">Who would win?</h1>
     </header>
-    <button type="button" id="help-button" aria-label="Help">?</button>
-    <dialog id="modal" aria-labelledby="modal-title" aria-describedby="modal-description">
-        <h2 id="modal-title" style="margin-top: 0;">What is this?</h2>
-        <p>Have you ever wondered who would win a fight between a bear and a gorilla? Or between Batman and Superman? Dwayne "The Rock" Johnson and Vin Diesel? Maybe both of them at once versus 10,000 killer bees?</p>
-        <p>Well, wonder no further.</p>
-        <p id="modal-description">You can ask ChatGPT who would win a fight between any two things by choosing a competition, typing two names, and clicking "Ask ChatGPT".</p>
-        <button class="button" aria-label="Exit help modal">Weird, but ok!</button>
-    </dialog>
     <section>
-        <aside alt="Website URL">whowouldwin.ai</aside>
+        <aside aria-label="Website URL">whowouldwin.ai</aside>
         <form>
             <label>
-                <span>Who would win in a</span>
+                Who would win in a
                 <select name="select-competition">
-                    <option>Fight?</option>
-                    <option>100-metre dash?</option>
-                    <option>Rap battle?</option>
-                    <option>Slam dunk contest?</option>
+                    <option>Fight</option>
+                    <option>100-metre dash</option>
+                    <option>Rap battle</option>
+                    <option>Slam dunk contest</option>
                 </select>
+                ?
             </label>
             <div class="input-group">
-                <input name="first" type="text" minlength="1" maxlength="32" autocomplete="off" required placeholder="One horse-sized duck" />
+                <input name="first" type="text" minlength="1" maxlength="32" autocomplete="off" required />
                 <span>vs.</span>
-                <input name="second" type="text" minlength="1" maxlength="32" autocomplete="off" required placeholder="100 duck-sized horses" />
+                <input name="second" type="text" minlength="1" maxlength="32" autocomplete="off" required />
             </div>
             <button type="submit" disabled>Ask ChatGPT</button>
         </form>
-        <div class="hidden">
-            <h2 class="hidden">Answer</h2>
-            <div id="answer" role="region" aria-live="polite"></div>
-        </div>
+    </section>
+    <section class="hidden">
+        <h2 class="hidden">Your answer will go here</h2>
+        <div id="answer" role="region" aria-live="polite" tabindex="-1"></div>
     </section>
     <script type="module" src="src/index.ts" defer></script>
 </body>

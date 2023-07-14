@@ -20,32 +20,17 @@ body {
     gap: 1rem;
 }
 
-section,
-dialog {
+section {
     width: 96%;
-
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
     box-sizing: border-box;
 
     border: 1px solid black;
     border-radius: 0.5rem;
 
     box-shadow: 0 4px 6px rgba(0,0,0,.1);
-}
-
-dialog {
-    margin: auto;
-    padding: 1rem 2rem;
-    max-width: 640px;
-}
-
-dialog::backdrop {
-    background: rgba(0, 0, 0, 0.4);
-}
-
-section {
-    margin: 0 auto;
-    padding: 0.5rem;
-    max-width: 800px;
 }
 
 aside {
@@ -69,17 +54,19 @@ label {
     gap: 0.25rem;
     width: 100%;
     
-    font-size: 1rem;
+    font-size: 1.5rem;
 }
 
 select {
     border: transparent;
     flex: 1;
     margin-left: -2px;
-    margin-bottom: -1px;
+    margin-bottom: -3px;
     min-width: 50px;
 
-    font-size: 16px;
+    font-size: 1.5rem;
+
+    cursor: pointer;
 }
 
 .input-group {
@@ -94,7 +81,7 @@ select {
 
 .input-group > input,
 .input-group > span {
-    font-size: 1.5rem;
+    font-size: 2rem;
 }
 
 input {
@@ -117,27 +104,7 @@ button:disabled {
 }
 
 section > div {
-    font-size: 1rem;
-
-    max-height: 480px;
-    margin-top: 1rem;
-    padding: 0.5rem;
-    box-sizing: border-box;
-
-    border: 1px solid black;
-    border-radius: 0.5rem;
-
-    overflow: scroll;
-}
-
-#help-button {
-    position: fixed;
-    top: 0;
-    right: 8px;
-    width: 3rem;
-    height: 3rem;
-
-    border-radius: 100%;
+    font-size: 1.5rem;
 }
 
 .hidden {
@@ -153,21 +120,10 @@ section > div {
 @media (min-width: 768px) {
     label,
     select,
-    .input-group > input,
-    .input-group > span {
+    section > div {
         font-size: 2rem;
     }
-
-    section {
-        padding: 1rem 2rem;
-    }
-
-    section > div {
-        font-size: 1.5rem;
-
-        padding: 1rem 2rem;
-    }
-
+    
     select {
         flex: unset;
 

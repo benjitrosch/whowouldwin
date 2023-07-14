@@ -2,6 +2,19 @@ const DEFAULT_SUBMIT_TEXT = "Ask ChatGPT"
 const LOADING_SUBMIT_TEXT = "Fighting..."
 const FAILURE_SUBMIT_TEXT = "Try again"
 
+const LABEL_ARIA_TEXT = (fight: string) => `Who would win in a ${fight}?`
+
+const DEFAULT_PLACEHOLDERS: [string, string][] = [
+    ["One horse-sized duck", "100 duck-sized horses"],
+    ["Goku", "Superman"],
+    ["Bear", "Gorilla"],
+    ["Ninjas", "Pirates"],
+    ["Robocop", "Terminator"],
+    ["Godzilla", "King Kong"],
+    ["Myself", "1,000 five year-olds"],
+    ["Mark Zuckerberg", "Elon Musk"],
+]
+
 function assert(condition: boolean, message: string) {
     if (!condition) throw new Error(message)
 }
@@ -10,22 +23,18 @@ const form = document.forms[0] as HTMLFormElement
 
 assert(!!form, 'Could not find form element')
 
-const firstInput = form.querySelector('input[name=first') as HTMLInputElement
-const secondInput = form.querySelector('input[name=second') as HTMLInputElement
-const fightSelect = form.querySelector('select[name=select-competition]') as HTMLSelectElement
-const submitButton = form.querySelector('button') as HTMLButtonElement
+const inputA = form.querySelector('input[name=first') as HTMLInputElement
+const inputB = form.querySelector('input[name=second') as HTMLInputElement
+const selectFight = form.querySelector('select[name=select-competition]') as HTMLSelectElement
+const buttonSubmit = form.querySelector('button') as HTMLButtonElement
 
-assert(!!firstInput || !!secondInput, 'Could not find input elements')
-assert(!!fightSelect, 'Could not find select element')
-assert(!!submitButton, 'Could not find submit button')
+assert(!!inputA || !!inputB, 'Could not find input elements')
+assert(!!selectFight, 'Could not find select element')
+assert(!!buttonSubmit, 'Could not find submit button')
 
-const helpModal = document.querySelector('dialog') as HTMLDialogElement
-const helpButton = document.querySelector('button') as HTMLButtonElement
-const exitModalButton = helpModal.querySelector('button') as HTMLButtonElement
-
-assert(!!helpModal, 'Could not find help modal')
-assert(!!helpButton, 'Could not find help button')
-assert(!!exitModalButton, 'Could not find exit modal button')
+const randomIndex = Math.floor(Math.random() * DEFAULT_PLACEHOLDERS.length)
+inputA.placeholder = DEFAULT_PLACEHOLDERS[randomIndex][0]
+inputB.placeholder = DEFAULT_PLACEHOLDERS[randomIndex][1]
 
 const answerContainer = document.getElementById('answer') as HTMLDivElement
 
@@ -42,20 +51,20 @@ function validateInput(e: KeyboardEvent) {
 }
 
 function validateButtonState() {
-    const bothInputsAreValid = firstInput.value.length > 1 && secondInput.value.length > 1
-    submitButton.disabled = !bothInputsAreValid
+    const bothInputsAreValid = inputA.value.length > 1 && inputB.value.length > 1
+    buttonSubmit.disabled = !bothInputsAreValid
 }
 
 async function askPrompt(e: SubmitEvent) {
     e.preventDefault()
 
     disableAllInputs()
-    submitButton.innerText = LOADING_SUBMIT_TEXT
+    buttonSubmit.innerText = LOADING_SUBMIT_TEXT
     answerContainer.innerText = ""
 
-    const fight = fightSelect.value.slice(0, fightSelect.value.length - 1)
-    const a = firstInput.value
-    const b = secondInput.value
+    const fight = selectFight.value
+    const a = inputA.value
+    const b = inputB.value
 
     const stream = new EventSource(`/api/ai?fight=${fight}&a=${a}&b=${b}`)
 
@@ -64,7 +73,7 @@ async function askPrompt(e: SubmitEvent) {
             stream.close()
 
             enableAllInputs()
-            submitButton.innerText = DEFAULT_SUBMIT_TEXT
+            buttonSubmit.innerText = DEFAULT_SUBMIT_TEXT
 
             return
         }
@@ -74,14 +83,18 @@ async function askPrompt(e: SubmitEvent) {
 
         if (delta) {
             answerContainer.innerText += delta
-            answerContainer.parentElement?.classList.remove('hidden')
+
+            if (answerContainer.innerText.length > 0) {
+                answerContainer.tabIndex = 0
+                answerContainer.parentElement?.classList.remove('hidden')
+            }
         }
     })
 
     stream.addEventListener('error', function(e) {
         function error() {
             enableAllInputs()
-            submitButton.innerText = FAILURE_SUBMIT_TEXT
+            buttonSubmit.innerText = FAILURE_SUBMIT_TEXT
         }
 
         const event = e.target as EventSource
@@ -111,42 +124,52 @@ function getTextWidth(text: string, font: string, fontSize: number) {
 }
 
 function resizeSelect() {
-    const text = fightSelect.options[fightSelect.selectedIndex].text
+    const text = selectFight.options[selectFight.selectedIndex].text
     const style = window.getComputedStyle(document.body)
     const font =  style.getPropertyValue('font-family')
     const fontSize = 2 * parseInt(style.getPropertyValue('font-size'), 10)
     const textWidth = getTextWidth(text, font, fontSize)
 
-    fightSelect.style.width = `${textWidth + 20}px`
+    selectFight.style.width = `${textWidth + 20}px`
+}
+
+function updateSelectAriaLabel() {
+    const options = selectFight.querySelectorAll('option')
+    const selectedIndex = selectFight.selectedIndex
+    const value = options[selectedIndex].value
+
+    const label = selectFight.parentElement as HTMLLabelElement
+    label.setAttribute('aria-label', LABEL_ARIA_TEXT(value))   
+}
+
+function handleSelect() {
+    resizeSelect()
+    updateSelectAriaLabel()
 }
 
 function disableAllInputs() {
-    firstInput.disabled = true
-    secondInput.disabled = true
-    fightSelect.disabled = true
-    submitButton.disabled = true
+    inputA.disabled = true
+    inputB.disabled = true
+    selectFight.disabled = true
+    buttonSubmit.disabled = true
 }
 
 function enableAllInputs() {
-    firstInput.disabled = false
-    secondInput.disabled = false
-    fightSelect.disabled = false
-    submitButton.disabled = false
+    inputA.disabled = false
+    inputB.disabled = false
+    selectFight.disabled = false
+    buttonSubmit.disabled = false
 }
 
-function openHelpModal() { helpModal.showModal() }
-function closeHelpModal() { helpModal.close() }
-
 resizeSelect()
-fightSelect.addEventListener('change', resizeSelect)
+updateSelectAriaLabel()
 
-helpButton.addEventListener('click', openHelpModal)
-exitModalButton.addEventListener('click', closeHelpModal)
+selectFight.addEventListener('change', handleSelect)
 
-firstInput.addEventListener('keypress', validateInput)
-secondInput.addEventListener('keypress', validateInput)
+inputA.addEventListener('keypress', validateInput)
+inputB.addEventListener('keypress', validateInput)
 
-firstInput.addEventListener('input', validateButtonState)
-secondInput.addEventListener('input', validateButtonState)
+inputA.addEventListener('input', validateButtonState)
+inputB.addEventListener('input', validateButtonState)
 
 form.addEventListener('submit', askPrompt)
