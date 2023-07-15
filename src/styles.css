@@ -33,18 +33,24 @@ section {
     position: relative;
     z-index: 1;
 
-    width: 100%;
+    width: 90%;
 
     padding: 2rem;
+    padding-top: 1rem;
+    
     box-sizing: border-box;
+}
+
+section:last-of-type {
+    background: black;
 }
 
 section > div {
     font-size: 1.5rem;
-    padding: 2rem;
+}
 
-    background-color: black;
-    border: 1px solid white;
+section:last-of-type {
+    margin-bottom: 1rem;
 }
 
 aside {
@@ -125,9 +131,6 @@ footer {
     z-index: 1;
     bottom: 0;
     right: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     gap: 1rem;
     padding: 0.25rem 0.5rem;
 
@@ -164,7 +167,7 @@ canvas {
     overflow: hidden;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 640px) {
     section > div {
         font-size: 2rem;
     }

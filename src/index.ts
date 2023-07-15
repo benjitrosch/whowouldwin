@@ -139,7 +139,7 @@ function resizeSelect() {
     const fontSize = parseInt(style.getPropertyValue('font-size'), 10)
     const textWidth = getTextWidth(text, font, fontSize)
 
-    selectFight.style.width = `${textWidth + 16}px`
+    selectFight.style.width = `${textWidth + 20}px`
 }
 
 function updateSelectAriaLabel() {
