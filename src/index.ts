@@ -14,6 +14,10 @@ const DEFAULT_PLACEHOLDERS: [string, string][] = [
     ["Godzilla", "King Kong"],
     ["Myself", "100 five year-olds"],
     ["Mark Zuckerberg", "Elon Musk"],
+    ["Gundam", "Titan"],
+    ["The Hamburglar", "Inspector Clouseau"],
+    ["Smash Bros. Player", "A bar of soap"],
+    ["Cat", "Vacuum"],
 ]
 
 function assert(condition: boolean, message: string) {
@@ -64,21 +68,18 @@ async function askPrompt(e: SubmitEvent) {
     answerContainer.innerText = ""
 
     const fight = selectFight.value
-    const a = inputA.value
-    const b = inputB.value
+    const a = encodeURIComponent(inputA.value)
+    const b = encodeURIComponent(inputB.value)
 
-    const stream = new EventSource(`/api/ai?fight=${fight}&a=${a}&b=${b}`)
+    const url = new URL(window.location + 'api/ai')
+
+    url.searchParams.set('fight', encodeURIComponent(fight))
+    url.searchParams.set('a', a)
+    url.searchParams.set('b', b)
+
+    const stream = new EventSource(url)
 
     stream.addEventListener('message', function(e) {
-        if (e.data === '[DONE]') {
-            stream.close()
-
-            enableAllInputs()
-            buttonSubmit.innerText = DEFAULT_SUBMIT_TEXT
-
-            return
-        }
-
         const message = JSON.parse(e.data)
         const delta = message.choices[0].delta.content
 
@@ -92,13 +93,21 @@ async function askPrompt(e: SubmitEvent) {
         }
     })
 
+    stream.addEventListener('stream-complete', function() {
+        stream.close()
+
+        enableAllInputs()
+        buttonSubmit.innerText = DEFAULT_SUBMIT_TEXT
+    })
+
     stream.addEventListener('error', function(e) {
-        function error() {
+        function error(e?: { status: string, message: string }) {
             enableAllInputs()
-            buttonSubmit.innerText = FAILURE_SUBMIT_TEXT
+            buttonSubmit.innerText = e ? e.message : FAILURE_SUBMIT_TEXT
         }
 
         const event = e.target as EventSource
+
         if (event.readyState === EventSource.CLOSED) {
             console.log('EventSource connection closed')
             error()
@@ -106,7 +115,9 @@ async function askPrompt(e: SubmitEvent) {
             console.log('EventSource connection failed. Retrying...')
         } else {
             console.error('EventSource encountered an unknown error:', e)
-            error()
+
+            const data = JSON.parse((e as any).data)
+            error(data)
         }
     })
 }
